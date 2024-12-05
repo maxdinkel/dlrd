@@ -99,10 +99,9 @@ def diffusion_model(coefficients):
 
     k_ele = jnp.sum(dshape_dx_dshape_dx_det_jacobian * kappa[:, :, jnp.newaxis, jnp.newaxis], axis=1)
 
-    def body_fun(i_, k_):
-        return k_.at[tuple(jnp.meshgrid(connectivity[i_], connectivity[i_]))].add(k_ele[i_])
-
-    k = jax.lax.fori_loop(0, len(connectivity), body_fun, jnp.zeros((num_nodes, num_nodes)))
+    k = jnp.zeros((num_nodes, num_nodes))
+    for m in range(len(connectivity)):
+        k = k.at[tuple(jnp.meshgrid(connectivity[m], connectivity[m]))].add(k_ele[m])
 
     u = jnp.linalg.solve(k[indices][:, indices], rhs[indices])
 

@@ -29,7 +29,7 @@ with global_settings:
         stochastic_optimizer=optimizer,
         variational_distribution=FullRankNormalVariational(num_dim),
         n_samples_per_iter=32,
-        verbose_every_n_iter=100_000,
+        verbose_every_n_iter=10_000,
         **rpvi_options
     )
     run_iterator(iterator, global_settings)

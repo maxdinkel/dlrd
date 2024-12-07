@@ -48,8 +48,6 @@ with open(output_dir / 'adam_n2_l01.pickle', 'rb') as handle:
     results = pickle.load(handle)
 
 variational_params = np.array(results['iteration_data']['variational_parameters'])
-n_sims = np.array(results['iteration_data']['n_sims'])[:len(variational_params)]
-
 
 
 k = np.arange(len(variational_params)).reshape(-1, 1)
@@ -87,6 +85,6 @@ axes[1].set_ylabel(r'$\overline{\rho}_i$', size=fontsize)
 axes[1].set_yscale('log')
 
 axes[1].grid()
-plt.savefig(f'snr.pdf')
+plt.savefig(output_dir / 'snr.pdf')
 
 # plt.show()

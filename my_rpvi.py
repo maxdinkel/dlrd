@@ -1,6 +1,5 @@
 from functools import partial
 
-import numpy as np
 from queens.iterators.reparameteriztion_based_variational_inference import RPVIIterator
 
 

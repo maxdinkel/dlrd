@@ -163,6 +163,6 @@ cbar = plt.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax, cmap=cmap)
 cbar.set_label('Iteration', size=fontsize)
 cbar.ax.tick_params(labelsize=fontsize)
 
-plt.savefig(f'1d_convergence.pdf')
+plt.savefig(output_dir / '1d_convergence.pdf')
 
 # plt.show()

@@ -73,10 +73,6 @@ class SGDSASAPlus(SGD):
             std = np.sqrt(p / (p - 1) * np.sum(diffs ** 2))
             dof = p - 1
 
-            # iid estimator
-            # std = np.std(simple_statistics, ddof=1)
-            # dof = n - 1
-
             half_width = stats.t.ppf(1 - self.delta / 2.0, dof) * std / math.sqrt(n)
 
             if mean - half_width < 0 < mean + half_width:
@@ -143,10 +139,6 @@ class SGDSASA(SGD):
             diffs = batch_means - zq_mean
             std = np.sqrt(p / (p - 1) * np.sum(diffs ** 2))
             dof = p - 1
-
-            # iid estimator
-            # std = np.std(zq, ddof=1)
-            # dof = n - 1
 
             half_width = stats.t.ppf(1 - self.delta / 2.0, dof) * std / math.sqrt(n)
             threshold = self.delta * vq_mean

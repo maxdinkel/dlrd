@@ -20,7 +20,7 @@ plt.rcParams["font.family"] = "Modern"
 
 output_dir = Path(__file__).parent.resolve() / "output"
 
-with open(f'{output_dir}adam_n32_l01_stepwise.pickle', 'rb') as handle:
+with open(output_dir / 'adam_n32_l01_stepwise.pickle', 'rb') as handle:
     results = pickle.load(handle)
 variational_params_true = np.array(results['final_variational_parameters'])
 variational_distribution = FullRankNormalVariational(num_dim)
@@ -134,7 +134,6 @@ fig.legend(['$\eta_0=1\mathrm{e}{-2}$, static', '$\eta_0=1\mathrm{e}{-2}$, DLRD'
             '$\eta_0=1\mathrm{e}{-3}$, static', '$\eta_0=1\mathrm{e}{-3}$, DLRD',
             '$\eta_0=1\mathrm{e}{-4}$, static', '$\eta_0=1\mathrm{e}{-4}$, DLRD'],
            loc='lower center', ncols=3, fontsize=fontsize)
-plt.savefig(f'div_diffusion.pdf')
-
+plt.savefig(output_dir / 'div_diffusion.pdf')
 
 # plt.show()

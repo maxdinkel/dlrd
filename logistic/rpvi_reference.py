@@ -1,4 +1,5 @@
 from pathlib import Path
+from copy import deepcopy
 
 import numpy as np
 
@@ -21,7 +22,7 @@ class CustomInitRPVIIterator(RPVIIterator):
 
 output_dir = Path(__file__).parent.resolve() / "output"
 
-rpvi_options = my_rpvi_options.copy()
+rpvi_options = deepcopy(my_rpvi_options)
 rpvi_options["result_description"]['iterative_field_names'] = []
 experiment_name = f'adam_n32_l01_stepwise'
 global_settings = GlobalSettings(experiment_name=experiment_name, output_dir=output_dir)

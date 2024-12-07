@@ -50,7 +50,7 @@ for col, optimizer in enumerate(['adam', 'sgd']):
     for i, result_file in enumerate(result_files):
         print(result_file)
 
-        with open(f"{output_dir}{optimizer}_n2_{result_file}.pickle", 'rb') as handle:
+        with open(output_dir / f"{optimizer}_n2_{result_file}.pickle", 'rb') as handle:
             results = pickle.load(handle)
 
         variational_params = np.array(results['iteration_data']['variational_parameters'])[indices]
@@ -107,7 +107,6 @@ fig.legend(['$\eta_0=1\mathrm{e}{-2}$, static', '$\eta_0=1\mathrm{e}{-2}$, DLRD'
             '$\eta_0=1\mathrm{e}{-3}$, static', '$\eta_0=1\mathrm{e}{-3}$, DLRD',
             '$\eta_0=1\mathrm{e}{-4}$, static', '$\eta_0=1\mathrm{e}{-4}$, DLRD'],
            loc='lower center', ncols=3, fontsize=fontsize)
-plt.savefig(f'div_quadnormal.pdf')
-
+plt.savefig(output_dir / 'div_quadnormal.pdf')
 
 # plt.show()

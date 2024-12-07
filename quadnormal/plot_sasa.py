@@ -51,7 +51,7 @@ for col, lr in enumerate(["l01", "l001", "l0001"]):
     for i, result_file in enumerate(result_files):
         print(result_file)
 
-        with open(f"{output_dir}sgd_n2_{lr}_{result_file}.pickle", 'rb') as handle:
+        with open(output_dir / f"sgd_n2_{lr}_{result_file}.pickle", 'rb') as handle:
             results = pickle.load(handle)
 
         variational_params = np.array(results['iteration_data']['variational_parameters'])[indices]
@@ -100,7 +100,6 @@ for col in range(ncols):
 
 
 fig.legend(['DLRD', 'SASA', 'SASA+'], loc='lower center', ncols=3, fontsize=fontsize)
-plt.savefig(f'div_quadnormal_sasa.pdf')
-
+plt.savefig(output_dir / 'div_quadnormal_sasa.pdf')
 
 # plt.show()

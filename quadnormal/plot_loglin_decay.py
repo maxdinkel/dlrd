@@ -52,7 +52,7 @@ for col, lr in enumerate(['l01', 'l001']):
     for i, result_file in enumerate(result_files):
         print(result_file)
 
-        with open(f"{output_dir}sgd_n2_{lr}{result_file}.pickle", 'rb') as handle:
+        with open(output_dir / f"sgd_n2_{lr}{result_file}.pickle", 'rb') as handle:
             results = pickle.load(handle)
 
         variational_params = np.array(results['iteration_data']['variational_parameters'])[indices]
@@ -100,7 +100,6 @@ axes[0, 1].set_title(r'$\eta_0 = 1\mathrm{e}{-3}$', size=fontsize+1, y=1.04)
 
 
 fig.legend(['static', 'DLRD', r'$\eta_{i}=\eta_0 / \sqrt{i}$', r'$\eta_{i}=\eta_0 / i$'], loc='lower center', ncols=4, fontsize=fontsize)
-plt.savefig(f'div_quadnormal_loglin.pdf')
-
+plt.savefig(output_dir / 'div_quadnormal_loglin.pdf')
 
 # plt.show()

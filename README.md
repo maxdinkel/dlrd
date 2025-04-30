@@ -11,7 +11,7 @@ Optionally GPU support:
 
 
 ### Run experiments
-- `git clone git@github.com:maxdinkel/dlrd.git <your-path-to-dlrd>`
-- `cd <your-path-to-dlrd>/..`
+- `git clone git@github.com:maxdinkel/dlrd.git <your-path-to-dlrd-parent>/dlrd`
+- `cd <your-path-to-dlrd-parent>`
 - `conda activate queens`
-- `python -m dynamic_learning_rate_decay.run`
+- `python -m dlrd.run`

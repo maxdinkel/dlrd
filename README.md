@@ -1,5 +1,5 @@
 ### Install queens
-- `git clone git@github.com:maxdinkel/queens.git <your-path-to-QUEENS>`
+- `git clone https://github.com/maxdinkel/queens.git <your-path-to-QUEENS>`
 - `cd <your-path-to-QUEENS>`
 - `git checkout dlrd`
 - `conda env create`
@@ -11,7 +11,10 @@ Optionally GPU support:
 
 
 ### Run experiments
-- `git clone git@github.com:maxdinkel/dlrd.git <your-path-to-dlrd-parent>/dlrd`
-- `cd <your-path-to-dlrd-parent>`
+- `git clone https://github.com/maxdinkel/dlrd.git dlrd`
+- `cd dlrd`
 - `conda activate queens`
-- `python -m dlrd.run`
+- `PYTHONPATH=. python quadnormal/run.py`
+- `PYTHONPATH=. python logistic/run.py`
+- `PYTHONPATH=. python wine/run.py`
+- `PYTHONPATH=. python diffusion/run.py`

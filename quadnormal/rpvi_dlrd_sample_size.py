@@ -7,9 +7,9 @@ from queens.global_settings import GlobalSettings
 from queens.variational_distributions import MeanFieldNormalVariational
 from queens.main import run_iterator
 
-from .joint_model import likelihood_model, parameters, num_dim
-from ..my_optimizers import MyAdam
-from ..my_rpvi import MyRPVIIterator
+from joint_model import likelihood_model, parameters, num_dim
+from my_optimizers import MyAdam
+from my_rpvi import MyRPVIIterator
 
 
 output_dir = Path(__file__).parent.resolve() / "output"

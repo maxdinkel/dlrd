@@ -9,7 +9,7 @@ import jax.numpy as jnp
 jax.config.update("jax_enable_x64", True)
 
 from queens.variational_distributions import FullRankNormalVariational
-from .joint_model import num_dim
+from joint_model import num_dim
 
 cmap = colormaps.get_cmap('plasma')
 plt.rcParams.update(plt.rcParamsDefault)
@@ -115,7 +115,7 @@ for col in range(ncols):
         ax.minorticks_off()
         ax.tick_params(axis='both', which='both', labelsize=fontsize)
         ax.set_xticks(np.logspace(2, 5, num=4))
-    axes[0, col].set_ylabel(r'$D_{\mathrm{J}}(q^*_{\boldsymbol{\lambda}} \parallel q_{\boldsymbol{\lambda}_i})$', size=fontsize)
+    axes[0, col].set_ylabel(r'$D_{\mathrm{J}}(q^{\mathrm{ref}}_{\boldsymbol{\lambda}} \parallel q_{\boldsymbol{\lambda}_i})$', size=fontsize)
     axes[1, col].set_ylabel('$\eta_i$', size=fontsize)
 
     axes[0, col].set_yticks(np.logspace(-4, 4, num=9))

@@ -5,7 +5,7 @@ import pickle
 import numpy as np
 from matplotlib import colormaps
 
-from .joint_model import num_dim, mu_true, var_true, log_sigma_true
+from joint_model import num_dim, mu_true, var_true, log_sigma_true
 
 cmap = colormaps.get_cmap('plasma')
 plt.rcParams.update(plt.rcParamsDefault)

@@ -12,8 +12,8 @@ from queens.main import run_iterator
 from queens.distributions import NormalDistribution
 from queens.parameters import Parameters
 
-from ..my_optimizers import MyAdam
-from ..my_rpvi import MyRPVIIterator
+from my_optimizers import MyAdam
+from my_rpvi import MyRPVIIterator
 
 cmap = colormaps.get_cmap('plasma')
 plt.rcParams.update(plt.rcParamsDefault)

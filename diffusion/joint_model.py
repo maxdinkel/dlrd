@@ -4,7 +4,7 @@ from queens.distributions.normal import NormalDistribution
 from queens.parameters.parameters import Parameters
 from queens.models.likelihood_models.gaussian_likelihood import GaussianLikelihood
 
-from .diffusion_model import num_components, DiffusionModel
+from diffusion_model import num_components, DiffusionModel
 
 
 num_dim = num_components

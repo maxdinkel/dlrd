@@ -4,12 +4,9 @@ import matplotlib.pyplot as plt
 import pickle
 import numpy as np
 from matplotlib import colormaps
-import jax
-import jax.numpy as jnp
-jax.config.update("jax_enable_x64", True)
 
-from queens.variational_distributions import FullRankNormalVariational
-from .joint_model import num_dim
+from skewnormal import MeanFieldSkewNormalVariational
+from joint_model import num_dim
 
 cmap = colormaps.get_cmap('plasma')
 plt.rcParams.update(plt.rcParamsDefault)
@@ -22,11 +19,8 @@ output_dir = Path(__file__).parent.resolve() / "output"
 
 with open(output_dir / 'adam_n32_l01_stepwise.pickle', 'rb') as handle:
     results = pickle.load(handle)
-variational_params_true = np.array(results['final_variational_parameters'])
-variational_distribution = FullRankNormalVariational(num_dim)
-mu_true, covariance_true, cholesky_covariance_true = (
-    variational_distribution.reconstruct_distribution_parameters(variational_params_true, return_cholesky=True))
-mu_true = mu_true.reshape(-1)
+var_params_ref = np.array(results['final_variational_parameters'])
+var_distribution = MeanFieldSkewNormalVariational(num_dim)
 
 result_files = ['l01', 'l01_dlrd', 'l001', 'l001_dlrd', 'l0001', 'l0001_dlrd']
 
@@ -58,30 +52,6 @@ indices = np.unique(np.logspace(3, 6, 100, dtype=int))
 colors = [cmap(0), cmap(0), cmap(0.4), cmap(0.4), cmap(0.8), cmap(0.8)]
 
 
-def vmap_fun(var_params):
-    m = var_params[: num_dim]
-    cholesky_covariance_array = var_params[num_dim:]
-    cholesky_covariance = jnp.zeros((num_dim, num_dim))
-    idx = jnp.tril_indices(num_dim, k=0, m=num_dim)
-    cholesky_covariance = cholesky_covariance.at[idx].set(cholesky_covariance_array)
-    s = jnp.matmul(cholesky_covariance, cholesky_covariance.T)
-    trace_term = (jnp.trace(jnp.linalg.solve(cholesky_covariance.T,
-                                             jnp.linalg.solve(cholesky_covariance,
-                                                              covariance_true))) +
-                  jnp.trace(jnp.linalg.solve(cholesky_covariance_true.T,
-                                             jnp.linalg.solve(cholesky_covariance_true,
-                                                              s))))
-
-    mean_diff = mu_true - m
-    term_2 = (mean_diff.T @ jnp.linalg.solve(cholesky_covariance_true.T,
-                                             jnp.linalg.solve(cholesky_covariance_true,
-                                                              mean_diff)) +
-              mean_diff.T @ jnp.linalg.solve(cholesky_covariance.T,
-                                             jnp.linalg.solve(cholesky_covariance,
-                                                              mean_diff)))
-    return trace_term + term_2
-
-
 for col, optimizer in enumerate(['adam', 'rmsprop']):
     for i, result_file in enumerate(result_files):
         print(result_file)
@@ -91,7 +61,17 @@ for col, optimizer in enumerate(['adam', 'rmsprop']):
 
         variational_params = np.array(results['iteration_data']['variational_parameters'])[indices]
 
-        div = np.array(0.5 * (-2 * num_dim + jax.vmap(vmap_fun)(variational_params)))
+        div = []
+        n_draws = int(1e5)
+        np.random.seed(42)
+        for var_params in variational_params:
+            samples_ref = var_distribution.draw(var_params_ref, n_draws)
+            kl_forward = np.mean(var_distribution.logpdf(var_params_ref, samples_ref)
+                                 - var_distribution.logpdf(var_params, samples_ref))
+            samples = var_distribution.draw(var_params, n_draws)
+            kl_reverse = np.mean(var_distribution.logpdf(var_params, samples)
+                                 - var_distribution.logpdf(var_params_ref, samples))
+            div.append(kl_forward + kl_reverse)
 
         line = (0, (1, 1))  # ':'
         width = 2.0
@@ -115,11 +95,11 @@ for col in range(ncols):
         ax.minorticks_off()
         ax.tick_params(axis='both', which='both', labelsize=fontsize)
         ax.set_xticks(np.logspace(3, 6, num=4))
-    axes[0, col].set_ylabel(r'$D_{\mathrm{J}}(q^*_{\boldsymbol{\lambda}} \parallel q_{\boldsymbol{\lambda}_i})$', size=fontsize)
+    axes[0, col].set_ylabel(r'$D_{\mathrm{J}}(q^{\mathrm{ref}}_{\boldsymbol{\lambda}} \parallel q_{\boldsymbol{\lambda}_i})$', size=fontsize)
     axes[1, col].set_ylabel('$\eta_i$', size=fontsize)
 
-    axes[0, col].set_yticks(np.logspace(-4, 3, num=8))
-    axes[1, col].set_yticks(np.logspace(-6, -2, num=5))
+    axes[0, col].set_yticks(np.logspace(-2, 3, num=6))
+    axes[1, col].set_yticks(np.logspace(-4, -2, num=3))
 
 for col in range(ncols):
     axes[0, col].set_ylim(min(axes[0, 0].get_ylim()[0], axes[0, 1].get_ylim()[0]), max(axes[0, 0].get_ylim()[1], axes[0, 1].get_ylim()[1]))

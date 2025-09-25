@@ -7,9 +7,9 @@ from queens.stochastic_optimizers.learning_rate_decay import DynamicLearningRate
 from queens.variational_distributions import FullRankNormalVariational
 from queens.main import run_iterator
 
-from ..my_optimizers import MyAdam, MyAdamax
-from ..my_rpvi import MyRPVIIterator
-from .joint_model import num_dim, likelihood_model, parameters
+from my_optimizers import MyAdam, MyAdamax
+from my_rpvi import MyRPVIIterator
+from joint_model import num_dim, likelihood_model, parameters
 
 
 output_dir = Path(__file__).parent.resolve() / "output"

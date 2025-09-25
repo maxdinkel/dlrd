@@ -9,17 +9,17 @@ from queens.main import run_iterator
 from my_optimizers import MyAdam, MyRMSprop
 from my_rpvi import RPVIIterator, my_rpvi_options
 from joint_model import num_dim, likelihood_model, parameters
-from skewnormal import MeanFieldSkewNormalVariational
+from sinh import MeanFieldSinhArcsinhVariational
 
 
 class CustomInitRPVIIterator(RPVIIterator):
     def _initialize_variational_params(self):
         self.variational_params = np.zeros(self.variational_distribution.n_parameters)
-        self.variational_params[num_dim:2*num_dim] = np.log(10)  # Initialize with prior variance
+        self.variational_params[num_dim:2 * num_dim] = 0.5 * np.log(10)  # Initialize with prior variance
 
 
 output_dir = Path(__file__).parent.resolve() / "output"
-num_samples = 8
+num_samples = 16
 for optimizer_class in [MyAdam, MyRMSprop]:
     for learning_rate in [0.01, 0.001, 0.0001]:
         for decay in [True, False]:
@@ -37,7 +37,7 @@ for optimizer_class in [MyAdam, MyRMSprop]:
                     model=likelihood_model,
                     parameters=parameters,
                     stochastic_optimizer=optimizer,
-                    variational_distribution=MeanFieldSkewNormalVariational(num_dim),
+                    variational_distribution=MeanFieldSinhArcsinhVariational(num_dim),
                     n_samples_per_iter=num_samples,
                     verbose_every_n_iter=50_000,
                     **my_rpvi_options
